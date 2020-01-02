@@ -4,6 +4,7 @@ import com.onlife.domain.Role;
 import com.onlife.domain.User;
 import com.onlife.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +25,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Value("${hostname}")
+    private String hostname;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -53,8 +57,10 @@ public class UserService implements UserDetailsService {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to Onlife. " +
-                            "Follow the link to complete registration: http://localhost:8080/activate/%s",
-                    user.getUsername(), user.getActivationCode()
+                            "Follow the link to complete registration: http://%s/activate/%s",
+                    user.getUsername(),
+                    hostname,
+                    user.getActivationCode()
             );
             mailSender.send(user.getEmail(), "Activation code", message);
         }

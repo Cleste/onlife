@@ -32,15 +32,15 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if (user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
         return user;
     }
 
-    public boolean addUser(User user){
+    public boolean addUser(User user) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
-        if(userFromDb != null){
+        if (userFromDb != null) {
             return false;
         }
         user.setActive(true);
@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
     }
 
     private void sendMessage(User user) {
-        if (!StringUtils.isEmpty(user.getEmail())){
+        if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to Onlife. " +
@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService {
 
     public boolean activateUser(String code) {
         User user = userRepository.findByActivationCode(code);
-        if(user == null)
+        if (user == null)
             return false;
 
         user.setActivationCode(null);
@@ -101,20 +101,20 @@ public class UserService implements UserDetailsService {
 
         boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
                 (userEmail != null && userEmail.equals(email));
-        if(isEmailChanged){
+        if (isEmailChanged) {
             user.setEmail(email);
 
-            if(!StringUtils.isEmpty(email)){
+            if (!StringUtils.isEmpty(email)) {
                 user.setActivationCode(UUID.randomUUID().toString());
             }
         }
 
-        if(!StringUtils.isEmpty(password)){
+        if (!StringUtils.isEmpty(password)) {
             user.setPassword(passwordEncoder.encode(password));
         }
 
         userRepository.save(user);
-        if(isEmailChanged) {
+        if (isEmailChanged) {
             sendMessage(user);
         }
     }

@@ -4,10 +4,8 @@ package com.onlife.controller;
 import com.onlife.domain.User;
 import com.onlife.domain.dto.CaptchaResponseDto;
 import com.onlife.service.UserService;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -81,7 +79,14 @@ public class RegistrationController {
             return "registration";
         }
 
-        return "redirect:/login";
+        return "redirect:/successful";
+    }
+
+    @GetMapping("/successful")
+    public String successful(Model model){
+        model.addAttribute("messageType", "success");
+        model.addAttribute("message", "Follow the link in the email to activate your account");
+        return "login";
     }
 
     @GetMapping("/activate/{code}")

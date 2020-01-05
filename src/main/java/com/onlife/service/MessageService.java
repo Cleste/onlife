@@ -1,14 +1,20 @@
 package com.onlife.service;
 
 import com.onlife.domain.Message;
+import com.onlife.domain.User;
+import com.onlife.domain.dto.MessageDto;
 import com.onlife.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -35,11 +41,23 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    public Iterable<Message> findAllMessages() {
-        return messageRepository.findAll();
+    public Page<MessageDto> messageList(Pageable pageable, String filter, User user) {
+        if (filter != null && !filter.isEmpty()) {
+            return messageRepository.findByTag(filter, pageable, user);
+        } else {
+            return messageRepository.findAll(pageable, user);
+        }
     }
 
-    public Iterable<Message> findMessageByTag(String filter) {
-        return messageRepository.findByTag(filter);
+    public Page<MessageDto> findAll(Pageable pageable, User user) {
+        return messageRepository.findAll(pageable, user);
+    }
+
+    public Page<MessageDto> findByUser(Pageable pageable, User currentUser, User user) {
+        return messageRepository.findByUser(pageable, user, currentUser);
+    }
+
+    public Page<MessageDto> findByMessage(Long id, Pageable pageable, User user){
+        return messageRepository.findByMessage(id, pageable, user);
     }
 }

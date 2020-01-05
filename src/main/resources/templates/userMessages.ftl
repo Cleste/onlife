@@ -1,5 +1,5 @@
 <#import "parts/common.ftl" as c>
-
+<#import "parts/messageAdd.ftl" as p>
 <@c.page>
     <h3>${userChannel.username}</h3>
     <#if !isCurrentUser>
@@ -31,8 +31,8 @@
             </div>
         </div>
     </div>
-    <#if isCurrentUser>
-        <#include "parts/messageEdit.ftl" />
+    <#if isCurrentUser && isUpdate>
+        <@p.add true/>
     </#if>
-    <#include "parts/messageList.ftl" />
+        <#include "parts/messageList.ftl" />
 </@c.page>

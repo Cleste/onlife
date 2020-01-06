@@ -2,33 +2,31 @@ package com.onlife.controller;
 
 import com.onlife.domain.Message;
 import com.onlife.domain.User;
-import com.onlife.repositories.MessageRepository;
-import javafx.scene.input.Dragboard;
+import com.onlife.domain.dto.MessageDto;
+import com.onlife.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
     @Autowired
-    private MessageRepository messageRepository;
+    private MessageService messageService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -39,14 +37,16 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
-        Iterable<Message> messages = messageRepository.findAll();
+    public String main(
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal User user
+    ) {
+        Page<MessageDto> page = messageService.messageList(pageable, filter, user);
 
-        if (filter != null && !filter.isEmpty())
-            messages = messageRepository.findByTag(filter);
-        else
-            messages = messageRepository.findAll();
-        model.addAttribute("messages", messages);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
         return "main";
     }
@@ -57,7 +57,8 @@ public class MainController {
             @Valid Message message,
             BindingResult bindingResult,
             Model model,
-            @RequestParam("file") MultipartFile file
+            @RequestParam("file") MultipartFile file,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
     ) throws IOException {
         message.setAuthor(user);
 
@@ -67,25 +68,18 @@ public class MainController {
             model.addAttribute("message", message);
         } else {
 
-            if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + file.getOriginalFilename();
-                file.transferTo(new File(uploadPath + "/" + resultFileName));
-                message.setFilename(resultFileName);
-            }
+            messageService.saveFile(message, file);
 
             model.addAttribute("message", null);
 
-            messageRepository.save(message);
+            messageService.saveMessage(message);
         }
-        Iterable<Message> messages = messageRepository.findAll();
-        model.addAttribute("messages", messages);
+        Page<MessageDto> page = messageService.findAll(pageable, user);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main");
         return "main";
     }
+
 
 
 }

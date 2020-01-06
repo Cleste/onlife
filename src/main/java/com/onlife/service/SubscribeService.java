@@ -13,7 +13,6 @@ public class SubscribeService {
 
     public void subscribe(User currentUser, User user) {
         user.getSubscribers().add(currentUser);
-
         userRepository.save(user);
     }
 

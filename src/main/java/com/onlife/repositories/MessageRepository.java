@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public interface MessageRepository extends CrudRepository<Message, Long> {
     @Query("select new com.onlife.domain.dto.MessageDto(" +
             "   m, " +
@@ -39,8 +42,6 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
             "group by m")
     Page<MessageDto> findByMessage(@Param("id") Long id, Pageable pageable, @Param("user") User user);
 
-
-
     @Query("select new com.onlife.domain.dto.MessageDto(" +
             "   m, " +
             "   count(ml), " +
@@ -51,5 +52,13 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
             "group by m")
     Page<MessageDto> findByUser(Pageable pageable, @Param("author") User author, @Param("user") User user);
 
-
+    @Query("select new com.onlife.domain.dto.MessageDto(" +
+            "   m, " +
+            "   count(ml), " +
+            "   sum(case when ml = :user then 1 else 0 end) > 0" +
+            ") " +
+            "from Message m left join m.likes ml " +
+            "where m.author = :author " +
+            "group by m")
+    ArrayList<MessageDto> findByUserList(@Param("author") User author, @Param("user") User user);
 }

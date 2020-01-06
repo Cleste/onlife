@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class MessageDto {
+public class MessageDto implements Comparable<MessageDto> {
     private Long id;
     private String text;
     private String tag;
@@ -32,4 +32,8 @@ public class MessageDto {
     }
 
 
+    @Override
+    public int compareTo(MessageDto o) {
+        return (int)(o.getId() - this.id);
+    }
 }

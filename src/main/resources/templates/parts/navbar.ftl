@@ -25,6 +25,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/user-messages/${currentUserId}">My messages</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/subscription/${currentUserId}">Subscription feed</a>
+                </li>
             </#if>
         </ul>
         <#if name != "quest">

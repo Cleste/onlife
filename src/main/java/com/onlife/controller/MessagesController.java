@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,8 +43,7 @@ public class MessagesController {
             model.addAttribute("isUpdate", false);
             model.addAttribute("url", "/user-messages/" + author.getId());
             model.addAttribute("page", page);
-        }
-        else {
+        } else {
             Page<MessageDto> page = messageService.findByMessage(message.getId(), pageable, author);
             model.addAttribute("isUpdate", true);
             model.addAttribute("url", "/user-messages/" + author.getId());
@@ -103,6 +103,20 @@ public class MessagesController {
                 .forEach(pair -> redirectAttributes.addAttribute(pair.getKey(), pair.getValue()));
 
         return "redirect:" + components.getPath();
+    }
+
+    @GetMapping("/subscription/{currentUser}")
+    public String subscriptionMessages(
+            @PathVariable User currentUser,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+            Model model
+    ) {
+        Page<MessageDto> page = messageService.findBySubscription(pageable, currentUser);
+        model.addAttribute("url", "/subscription/" + currentUser.getId());
+        model.addAttribute("page", page);
+        model.addAttribute("subscriptionsCount", currentUser.getSubscriptions().size());
+        model.addAttribute("subscribersCount", currentUser.getSubscribers().size());
+        return "subscriptionMessage";
     }
 }
 

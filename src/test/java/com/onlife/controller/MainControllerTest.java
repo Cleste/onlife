@@ -13,12 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,7 +37,7 @@ public class MainControllerTest {
     private MainController mainController;
 
     @Test
-    public void contextLoadTest() throws Exception{
+    public void contextLoadTest() throws Exception {
         this.mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -45,7 +45,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void mainPageTest() throws Exception{
+    public void mainPageTest() throws Exception {
         this.mockMvc.perform(get("/main"))
                 .andDo(print())
                 .andExpect(authenticated())
@@ -53,7 +53,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void messageListTest() throws Exception{
+    public void messageListTest() throws Exception {
         this.mockMvc.perform(get("/main"))
                 .andDo(print())
                 .andExpect(authenticated())
@@ -61,7 +61,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void filterMessageTest() throws Exception{
+    public void filterMessageTest() throws Exception {
         this.mockMvc.perform(get("/main").param("filter", "first"))
                 .andDo(print())
                 .andExpect(authenticated())
@@ -72,7 +72,7 @@ public class MainControllerTest {
 
 
     @Test
-    public void addMessageToListTest() throws Exception{
+    public void addMessageToListTest() throws Exception {
         MockHttpServletRequestBuilder multipart = multipart("/main")
                 .file("file", "123".getBytes())
                 .param("text", "fifth")

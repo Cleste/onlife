@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
     @Query("select new com.onlife.domain.dto.MessageDto(" +

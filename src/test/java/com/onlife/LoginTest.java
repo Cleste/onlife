@@ -34,7 +34,7 @@ public class LoginTest {
     private MainController mainController;
 
     @Test
-    public void loginTest() throws Exception{
+    public void loginTest() throws Exception {
         this.mockMvc.perform(get("/main"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -42,7 +42,7 @@ public class LoginTest {
     }
 
     @Test
-    public void correctLoginTest() throws Exception{
+    public void correctLoginTest() throws Exception {
         this.mockMvc.perform(formLogin().user("admin").password("123"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -50,7 +50,7 @@ public class LoginTest {
     }
 
     @Test
-    public void badCredentials() throws Exception{
+    public void badCredentials() throws Exception {
         this.mockMvc.perform(post("/login").param("user", "Alfred"))
                 .andDo(print())
                 .andExpect(status().isForbidden());

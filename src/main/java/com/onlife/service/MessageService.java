@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,17 +56,17 @@ public class MessageService {
         return messageRepository.findByUser(pageable, user, currentUser);
     }
 
-    public Page<MessageDto> findByMessage(Long id, Pageable pageable, User user){
+    public Page<MessageDto> findByMessage(Long id, Pageable pageable, User user) {
         return messageRepository.findByMessage(id, pageable, user);
     }
 
     public Page<MessageDto> findBySubscription(Pageable pageable, User currentUser) {
         List<MessageDto> messageDtos = new ArrayList<>();
         Set<User> subscriptions = currentUser.getSubscriptions();
-        for(User user: subscriptions){
+        for (User user : subscriptions) {
             messageDtos.addAll(messageRepository.findByUserList(user, currentUser));
         }
         Collections.sort(messageDtos);
-        return new PageImpl<MessageDto>(messageDtos, pageable, messageDtos.size());
+        return new PageImpl<>(messageDtos, pageable, messageDtos.size());
     }
 }

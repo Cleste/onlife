@@ -27,13 +27,14 @@ public class MessageDto implements Comparable<MessageDto> {
         this.filename = message.getFilename();
         this.meLiked = meLiked;
     }
-    public String getAuthorName(){
+
+    public String getAuthorName() {
         return MessageHelper.getAuthorName(author);
     }
 
 
     @Override
     public int compareTo(MessageDto o) {
-        return (int)(o.getId() - this.id);
+        return (int) (o.getId() - this.id);
     }
 }

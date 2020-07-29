@@ -34,5 +34,5 @@
     <#if isCurrentUser && isUpdate>
         <@p.add true/>
     </#if>
-        <#include "parts/messageList.ftl" />
+    <#include "parts/messageList.ftl" />
 </@c.page>

@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}/${DB_NAME}?${DB_SSL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate.ddl-auto: validate
+    properties.hibernate.jdbc.lob.non_contextual_creation: true
+  session:
+    jdbc:
+      initialize-schema: always
+      table-name: SPRING_SESSION
+  mail:
+    protocol: smtps
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    debug: true
+  freemarker:
+    expose-request-attributes: true
+recaptcha:
+  secret: ${RECAPTCHA_SECRET}
+upload.path: ${UPLOAD_PATH}
+server:
+  port: 5000

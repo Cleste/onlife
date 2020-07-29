@@ -7,10 +7,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,9 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -55,6 +54,7 @@ public class UserServiceTest {
                         ArgumentMatchers.eq("Activation code"),
                         ArgumentMatchers.contains("Welcome to Onlife"));
     }
+
     @Test
     public void addUserFailTest() {
         User testUser = new User();
@@ -125,7 +125,7 @@ public class UserServiceTest {
         String testEmail = "test@e.mail";
         String testPassword = "testPass";
 
-        userService.updateProfile(testUser,testPassword,testEmail);
+        userService.updateProfile(testUser, testPassword, testEmail);
 
         Assert.assertNotNull(testUser.getActivationCode());
         Assert.assertEquals(passwordEncoder.encode(testPassword), testUser.getPassword());

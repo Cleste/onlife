@@ -39,7 +39,7 @@
                 </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <#if isUpdate>
-                <input type="hidden" name="id" value="<#if message??>${message.id}</#if>"/>
+                    <input type="hidden" name="id" value="<#if message??>${message.id}</#if>"/>
                 </#if>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary"><#if isUpdate>Save<#else>Add</#if></button>

@@ -34,20 +34,20 @@ public class Message {
     @ManyToMany
     @JoinTable(
             name = "message_likes",
-            joinColumns = { @JoinColumn(name = "message_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id")}
+            joinColumns = {@JoinColumn(name = "message_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<User> likes = new HashSet<>();
 
     private String filename;
 
-    public Message(String text, String tag, User user){
+    public Message(String text, String tag, User user) {
         author = user;
         this.text = text;
         this.tag = tag;
     }
 
-    public String getAuthorName(){
+    public String getAuthorName() {
         return MessageHelper.getAuthorName(author);
     }
 

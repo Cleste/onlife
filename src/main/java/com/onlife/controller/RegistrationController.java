@@ -49,7 +49,7 @@ public class RegistrationController {
         String url = String.format(CAPTCHA_URL, secret, captchaResponse);
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
-        if(!response.isSuccess()){
+        if (!response.isSuccess()) {
             model.addAttribute("captchaError", "Fill captcha");
         }
 
@@ -83,7 +83,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/successful")
-    public String successful(Model model){
+    public String successful(Model model) {
         model.addAttribute("messageType", "success");
         model.addAttribute("message", "Follow the link in the email to activate your account");
         return "login";

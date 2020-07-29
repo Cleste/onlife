@@ -4,7 +4,6 @@ package com.onlife.controller;
 import com.onlife.domain.User;
 import com.onlife.service.SubscribeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +28,7 @@ public class SubscriptionController {
 
     @GetMapping("unsubscribe/{user}")
     public String unsubscribe(@PathVariable User user,
-                            @AuthenticationPrincipal User currentUser
+                              @AuthenticationPrincipal User currentUser
     ) {
 
         subscribeService.unsubscribe(currentUser, user);
@@ -45,7 +44,7 @@ public class SubscriptionController {
         model.addAttribute("userChannel", user);
         model.addAttribute("type", type);
 
-        if("subscriptions".equals(type)){
+        if ("subscriptions".equals(type)) {
             model.addAttribute("users", user.getSubscriptions());
         } else {
             model.addAttribute("users", user.getSubscribers());
